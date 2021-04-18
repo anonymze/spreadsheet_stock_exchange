@@ -52,10 +52,8 @@ class BourseSpreadsheetCommand extends Command
              foreach (AllBusiness::$allBusiness as $business) {
                  $index = 0;
                 foreach ($this->whichData as $extendUrl) {
-
                     // get content page
                     $page = @file_get_contents(self::$yahooUrl . $business . $extendUrl);
-
                     if ($page !== false) {
                         // setup document
                         $page = mb_convert_encoding($page, 'HTML-ENTITIES', 'UTF-8');
@@ -68,15 +66,22 @@ class BourseSpreadsheetCommand extends Command
 
                         if (!empty($title) && !empty($thTable) && !empty($tdTable)) {
                             $sheet->insertDataInSpreadsheet($title, $thTable, $tdTable);
-                            $count ++;
-                            echo $count."-";
+                        } else {
+                            $fileError = $this->params->get('kernel.project_dir')."/public/spreadsheets/errors.txt";
+                            $current = @file_get_contents($fileError);
+                            if ($current !== false) {
+                                $current .= self::$yahooUrl . $business . $extendUrl . "\n";
+                                file_put_contents($fileError, $current);
+                            }
                         }
+                        $count ++;
                         $index++;
+                        echo $count."-";
                     } else {
                         $fileError = $this->params->get('kernel.project_dir')."/public/spreadsheets/errors.txt";
                         $current = @file_get_contents($fileError);
                         if ($current !== false) {
-                            $current .= self::$yahooUrl . $business . $extendUrl . "\n";
+                            $current .= "404: ".self::$yahooUrl . $business . $extendUrl . "\n";
                             file_put_contents($fileError, $current);
                         }
                     }
