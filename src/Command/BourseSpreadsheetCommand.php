@@ -76,7 +76,7 @@ class BourseSpreadsheetCommand extends Command
                         $fileError = $this->params->get('kernel.project_dir')."/public/spreadsheets/errors.txt";
                         $current = @file_get_contents($fileError);
                         if ($current !== false) {
-                            $current .= self::$yahooUrl . $business . $this->stateAppendingYahooBinance[$category] . $extendUrl . "\n";
+                            $current .= self::$yahooUrl . $business . $extendUrl . "\n";
                             file_put_contents($fileError, $current);
                         }
                     }
