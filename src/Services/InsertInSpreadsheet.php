@@ -80,7 +80,14 @@ class InsertInSpreadsheet {
                     $this->countRow++;
                     $countAlphabet = 1;
                 }
-                $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet] . $this->countRow, $tdTableReconstruct[$i]);
+                $val =  preg_replace('/\s+/u', '', $tdTableReconstruct[$i]);
+
+                if(is_numeric($val)) {
+                    $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet] . $this->countRow, '.=VALUE'.(int)$val."'");
+                } else {
+                    $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet] . $this->countRow, $val);
+                }
+
                 $countAlphabet++;
             }
         }
