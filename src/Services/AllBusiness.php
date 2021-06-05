@@ -4,7 +4,8 @@ namespace App\Services;
 
 class AllBusiness {
 
-public static $allBusiness = ["TRAN.BA", "APBR.BA",
+public static $allBusiness = [
+    "TRAN.BA", "APBR.BA",
 "CSCO.BA",
 "COME.BA",
 "BHIP.BA",
