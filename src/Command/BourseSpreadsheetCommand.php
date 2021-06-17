@@ -77,7 +77,7 @@ class BourseSpreadsheetCommand extends Command
                         $count ++;
                         $index++;
                         echo $count."-";
-                    } else {
+                      } else {
                         $fileError = $this->params->get('kernel.project_dir')."/public/spreadsheets/errors.txt";
                         $current = @file_get_contents($fileError);
                         if ($current !== false) {

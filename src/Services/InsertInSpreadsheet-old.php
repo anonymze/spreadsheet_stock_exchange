@@ -52,12 +52,16 @@ class InsertInSpreadsheet {
     protected $secondFormulaCell3 = "";
     protected $secondFormulaCell4 = "";
     protected $secondFormulaCell5 = "";
-
-    protected $firstArrayFormulaCell = [];
-    protected $secondArrayFormulaCell = [];
-
-    protected $firstCountDown = 0;
-    protected $secondCountDown = -1;
+    protected $beforeValueCell1 = "";
+    protected $beforeValueCell2 = "";
+    protected $beforeValueCell3 = "";
+    protected $beforeValueCell4 = "";
+    protected $beforeValueCell5 = "";
+    protected $valueCell1 = "";
+    protected $valueCell2 = "";
+    protected $valueCell3 = "";
+    protected $valueCell4 = "";
+    protected $valueCell5 = "";
 
     public function __construct(ParameterBagInterface $params, $keyExtend)
     {
@@ -101,49 +105,14 @@ class InsertInSpreadsheet {
                 }
                 $val =  preg_replace('/\s+/u', '', $tdTableReconstruct[$i]);
 
-                if ($this->firstCountDown > 0) {
-                    $this->firstArrayFormulaCell[] = $val;
-                    $this->firstCountDown--;
-                }
-
-                if ($this->secondCountDown > 0) {
-                    $this->secondArrayFormulaCell[] = $val;
-                    $this->secondCountDown--;
-                }
-
-                if ($this->secondCountDown === 0) {
-                    $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + 3] . ($this->countRow), "MARGE BRUTE");
-
-                    for($c = 0, $cMax = count($this->firstArrayFormulaCell); $c < $cMax; $c++) {
-                        $result = ((int)$this->secondArrayFormulaCell[$c] / (int)$this->firstArrayFormulaCell[$c]) * 100;
-
-                        if ($result > 65) {
-                            $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow, $result)
-                                ->getStyle(elf::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow)
-                                ->getFill()
-                                ->setFillType(Fill::FILL_SOLID)
-                                ->getStartColor()
-                                ->setARGB('39a6a3');
-                        } else {
-                            $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow, $result);
-                        }
-
-                        if ($c === 4) {
-                            $this->secondCountDown = -1;
-                        }
-                    }
-
-
-                }
-
                 if ($val === "Chiffred’affairestotal") {
                     $this->setupFirstRows($countAlphabet, $this->countRow);
-                    $this->firstCountDown = 5;
                 }
+
+
 
                 if ($val === "Bénéficebrut") {
                     $this->setupSecondRows($countAlphabet, $this->countRow);
-                    $this->secondCountDown = 5;
                 }
 
                 if(is_numeric($val)) {
