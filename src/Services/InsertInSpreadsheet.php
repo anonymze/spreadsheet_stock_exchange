@@ -77,7 +77,7 @@ class InsertInSpreadsheet {
         }
     }
 
-    public function insertDataInSpreadsheet(string $title, array $thTable, array $tdTable): void {
+    public function insertDataInSpreadsheet(string $title, array $thTable, array $tdTable, int $count): void {
         if (file_exists(self::$path)) {
             $this->countRow = $this->sheet->getHighestDataRow();
             $this->countRow += 2;
@@ -95,6 +95,7 @@ class InsertInSpreadsheet {
             $tdTableReconstruct = $value;
             $countAlphabet = 1;
             for ($i = 0, $iMax = count($tdTableReconstruct); $i < $iMax; $i++) {
+
                 if (!empty($tdTableReconstruct[$i]) && preg_match('/\d/', $tdTableReconstruct[$i]) !== 1 && $tdTableReconstruct[$i] !== "-" && $i !== 0) {
                     $this->countRow++;
                     $countAlphabet = 1;
@@ -121,7 +122,7 @@ class InsertInSpreadsheet {
 
                         if($val1 > 0 && $val2 > 0) {
                             $result = ($val2 / $val1) * 100;
-                            if ($result > 65) {
+                            if ($result > 65 && $result < 100) {
                                 $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow, $result)
                                     ->getStyle(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow)
                                     ->getFill()
@@ -133,7 +134,7 @@ class InsertInSpreadsheet {
                             }
                         }
 
-                        if ($c === 4) {
+                        if ($c === ($count - 2)) {
                             $this->secondCountDown = -1;
                         }
                     }
@@ -143,12 +144,13 @@ class InsertInSpreadsheet {
 
                 if ($val === "Chiffred’affairestotal") {
                     $this->setupFirstRows($countAlphabet, $this->countRow);
-                    $this->firstCountDown = 5;
+                    $this->firstCountDown = $count -1;
+                    var_dump($this->firstCountDown);
                 }
 
                 if ($val === "Bénéficebrut") {
                     $this->setupSecondRows($countAlphabet, $this->countRow);
-                    $this->secondCountDown = 5;
+                    $this->secondCountDown = $count -1;
                 }
 
                 if(is_numeric($val)) {

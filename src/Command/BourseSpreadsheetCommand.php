@@ -65,7 +65,7 @@ class BourseSpreadsheetCommand extends Command
                         $tdTable = $documentHTML->getData($this->yahooTdClassName);
 
                         if (!empty($title) && !empty($thTable) && !empty($tdTable)) {
-                            $sheet->insertDataInSpreadsheet($title, $thTable, $tdTable);
+                            $sheet->insertDataInSpreadsheet($title, $thTable, $tdTable, count($thTable));
                         } else {
                             $fileError = $this->params->get('kernel.project_dir')."/public/spreadsheets/errors.txt";
                             $current = @file_get_contents($fileError);
