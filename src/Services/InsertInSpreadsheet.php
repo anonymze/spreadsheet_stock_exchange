@@ -114,7 +114,7 @@ class InsertInSpreadsheet {
                 }
 
                 if ($this->secondCountDown === 0) {
-                    $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + 3] . ($this->countRow), "MARGE BRUTE");
+                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 2] . ($this->countRow), "MARGE BRUTE");
 
                     for($c = 0, $cMax = count($this->firstArrayFormulaCell); $c < $cMax; $c++) {
                         $val1 = (int)$this->firstArrayFormulaCell[$c];
@@ -123,14 +123,14 @@ class InsertInSpreadsheet {
                         if($val1 > 0 && $val2 > 0) {
                             $result = ($val2 / $val1) * 100;
                             if ($result > 65 && $result < 100) {
-                                $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow, $result)
-                                    ->getStyle(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow)
+                                $this->sheet->setCellValue(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow, $result)
+                                    ->getStyle(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow)
                                     ->getFill()
                                     ->setFillType(Fill::FILL_SOLID)
                                     ->getStartColor()
                                     ->setARGB('39a6a3');
                             } else {
-                                $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow, $result);
+                                $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (3 + $c)] . $this->countRow, $result);
                             }
                         }
 
