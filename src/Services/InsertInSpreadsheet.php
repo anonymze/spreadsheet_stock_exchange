@@ -99,15 +99,16 @@ class InsertInSpreadsheet {
                     $this->countRow++;
                     $countAlphabet = 1;
                 }
-                $val =  preg_replace('/\s+/u', '', $tdTableReconstruct[$i]);
+
+                $val =  preg_replace('/-?\s?/u', '', $tdTableReconstruct[$i]);
 
                 if ($this->firstCountDown > 0) {
-                    $this->firstArrayFormulaCell[] = $val;
+                    $this->firstArrayFormulaCell[] = $val ?: "1";
                     $this->firstCountDown--;
                 }
 
                 if ($this->secondCountDown > 0) {
-                    $this->secondArrayFormulaCell[] = $val;
+                    $this->secondArrayFormulaCell[] = $val ?: "1";
                     $this->secondCountDown--;
                 }
 
@@ -115,17 +116,21 @@ class InsertInSpreadsheet {
                     $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + 3] . ($this->countRow), "MARGE BRUTE");
 
                     for($c = 0, $cMax = count($this->firstArrayFormulaCell); $c < $cMax; $c++) {
-                        $result = ((int)$this->secondArrayFormulaCell[$c] / (int)$this->firstArrayFormulaCell[$c]) * 100;
+                        $val1 = (int)$this->firstArrayFormulaCell[$c];
+                        $val2 = (int)$this->secondArrayFormulaCell[$c];
 
-                        if ($result > 65) {
-                            $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow, $result)
-                                ->getStyle(elf::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow)
-                                ->getFill()
-                                ->setFillType(Fill::FILL_SOLID)
-                                ->getStartColor()
-                                ->setARGB('39a6a3');
-                        } else {
-                            $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow, $result);
+                        if($val1 > 0 && $val2 > 0) {
+                            $result = ($val2 / $val1) * 100;
+                            if ($result > 65) {
+                                $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow, $result)
+                                    ->getStyle(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow)
+                                    ->getFill()
+                                    ->setFillType(Fill::FILL_SOLID)
+                                    ->getStartColor()
+                                    ->setARGB('39a6a3');
+                            } else {
+                                $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (4 + $c)] . $this->countRow, $result);
+                            }
                         }
 
                         if ($c === 4) {
