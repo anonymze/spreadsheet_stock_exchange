@@ -72050,6 +72050,7 @@ public static $singapore = [
 
 ];
 
+
 public static $allBusiness = [
     "TRAN.BA", "APBR.BA",
 "CSCO.BA",
