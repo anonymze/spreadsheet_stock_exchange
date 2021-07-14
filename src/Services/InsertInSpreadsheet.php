@@ -91,6 +91,48 @@ class InsertInSpreadsheet {
     protected $researchDevelopment5 = "";
     protected $researchDevelopment6 = "";
     protected $researchDevelopment7 = "";
+    protected $ordinaryActionaryBenefice = "";
+    protected $ordinaryActionaryBenefice2 = "";
+    protected $ordinaryActionaryBenefice3 = "";
+    protected $ordinaryActionaryBenefice4 = "";
+    protected $ordinaryActionaryBenefice5 = "";
+    protected $ordinaryActionaryBenefice6 = "";
+    protected $ordinaryActionaryBenefice7 = "";
+    protected $investFinance = "";
+    protected $investFinance2 = "";
+    protected $investFinance3 = "";
+    protected $investFinance4 = "";
+    protected $investFinance5 = "";
+    protected $investFinance6 = "";
+    protected $investFinance7 = "";
+    protected $totalPassif  = "";
+    protected $totalPassif2  = "";
+    protected $totalPassif3  = "";
+    protected $totalPassif4  = "";
+    protected $totalPassif5  = "";
+    protected $totalPassif6  = "";
+    protected $totalPassif7  = "";
+    protected $properCapitalTotal = "";
+    protected $properCapitalTotal2 = "";
+    protected $properCapitalTotal3 = "";
+    protected $properCapitalTotal4 = "";
+    protected $properCapitalTotal5 = "";
+    protected $properCapitalTotal6 = "";
+    protected $properCapitalTotal7 = "";
+    protected $inventary = "";
+    protected $inventary2 = "";
+    protected $inventary3 = "";
+    protected $inventary4 = "";
+    protected $inventary5 = "";
+    protected $inventary6 = "";
+    protected $inventary7 = "";
+    protected $arrangedBenefice = "";
+    protected $arrangedBenefice2 = "";
+    protected $arrangedBenefice3 = "";
+    protected $arrangedBenefice4 = "";
+    protected $arrangedBenefice5 = "";
+    protected $arrangedBenefice6 = "";
+    protected $arrangedBenefice7 = "";
 
     protected $firstCurrent = "";
     protected $secondCurrent = "";
@@ -168,64 +210,146 @@ class InsertInSpreadsheet {
                 }
 
                 if ($this->secondCountDown === $count - 1) {
-                    for($c = 1; $c <= $count; $c++) {
+                    for($c = 1; $c < $count; $c++) {
                         $color = false;
 
-                        // calcul formula basic
-                        if ($c === 1) {
-                            switch($this->secondCurrent) {
-                                case "brutBusiness":
-                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "MARGE BRUTE");
+                        // check previous result and calculate %
+                        if ($this->secondCurrent === "ordinaryActionaryBenefice") {
+
+                            switch ($this->secondCurrent) {
+                                case "ordinaryActionaryBenefice":
+                                    $percent = 10;
                                     break;
-                                case "generalSellAdministrative":
-                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "FRAIS D'EXPLOIT");
-                                    break;
-                                case "interestCharge":
-                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "CHARGE D'INTERET");
-                                    break;
-                                case "netBenefice":
-                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "MARGE NET");
-                                    break;
-                                case "researchDevelopment":
-                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "RESERCHE DEVELOPPEMENT");
+                                case "arrangedBenefice":
+                                case "inventary":
+                                    $percent = 1;
                                     break;
                             }
 
-                            if ($this->{$this->secondCurrent} > 0 && $this->{$this->firstCurrent} > 0) {
-                                $result = ($this->{$this->secondCurrent} / $this->{$this->firstCurrent}) * 100;
-                            }
-                        } else if ($this->{$this->secondCurrent . $c} > 0 && $this->{$this->firstCurrent . $c} > 0) {
-                            $result = ($this->{$this->secondCurrent . $c} / $this->{$this->firstCurrent . $c}) * 100;
-                        }
+                                if ($c === 1) {
+                                    if ($this->{$this->secondCurrent} > 0 && $this->{$this->secondCurrent . ($c + 1)} > 0) {
+                                        if ($this->{$this->secondCurrent} > $this->{$this->secondCurrent . "2"} + ($this->{$this->secondCurrent . "2"} * $percent / 100)) {
+                                            $this->sheet->setCellValue(self::$alaphabetNumeric[$c + 1] . $this->countRow, $this->{$this->secondCurrent})
+                                                ->getStyle(self::$alaphabetNumeric[$c + 1] . $this->countRow)
+                                                ->getFill()
+                                                ->setFillType(Fill::FILL_SOLID)
+                                                ->getStartColor()
+                                                ->setARGB('39a6a3');
+                                        } else {
+                                            $this->sheet->setCellValue(self::$alaphabetNumeric[$c + 1] . $this->countRow, $this->{$this->secondCurrent})
+                                                ->getStyle(self::$alaphabetNumeric[$c + 1] . $this->countRow)
+                                                ->getFill()
+                                                ->setFillType(Fill::FILL_SOLID)
+                                                ->getStartColor()
+                                                ->setARGB('FF0000');
+                                        }
+                                    }
+                                } else {
+                                    if ($this->{$this->secondCurrent . $c} > 0 && $this->{$this->secondCurrent . ($c + 1)} > 0) {
+                                        if ($this->{$this->secondCurrent . $c} > $this->{$this->secondCurrent . ($c + 1)} + ($this->{$this->secondCurrent . ($c + 1)} * $percent / 100)) {
+                                            $this->sheet->setCellValue(self::$alaphabetNumeric[$c + 1] . $this->countRow, $this->{$this->secondCurrent . $c})
+                                                ->getStyle(self::$alaphabetNumeric[$c + 1] . $this->countRow)
+                                                ->getFill()
+                                                ->setFillType(Fill::FILL_SOLID)
+                                                ->getStartColor()
+                                                ->setARGB('39a6a3');
+                                        } else {
+                                            $this->sheet->setCellValue(self::$alaphabetNumeric[$c + 1] . $this->countRow, $this->{$this->secondCurrent . $c})
+                                                ->getStyle(self::$alaphabetNumeric[$c + 1] . $this->countRow)
+                                                ->getFill()
+                                                ->setFillType(Fill::FILL_SOLID)
+                                                ->getStartColor()
+                                                ->setARGB('FF0000');
+                                        }
+                                    }
 
-                        if (isset($result)) {
-                            switch($this->secondCurrent) {
-                                case "brutBusiness":
-                                    $color = $result > 65;
-                                break;
-                                case "generalSellAdministrative":
-                                    $color = $result < 30;
+                            }
+                        } else {
+
+                            // calcul formula basic
+                            if ($c === 1) {
+                                switch ($this->secondCurrent) {
+                                    case "brutBusiness":
+                                        $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "MARGE BRUTE");
+                                        break;
+                                    case "generalSellAdministrative":
+                                        $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "FRAIS D'EXPLOIT");
+                                        break;
+                                    case "interestCharge":
+                                        $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "CHARGE D'INTERET");
+                                        break;
+                                    case "netBenefice":
+                                        $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "MARGE NET");
+                                        break;
+                                    case "researchDevelopment":
+                                        $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "RESERCHE DEVELOPPEMENT");
+                                        break;
+                                    case "investFinance":
+                                        $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "CAPEX");
+                                        break;
+                                    case "properCapitalTotal":
+                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + 3] . ($this->countRow), "RATIO FINANCIER");
                                     break;
-                                case "interestCharge":
-                                    $color = $result < 15;
-                                    break;
-                                case "netBenefice":
-                                    $color = $result > 35;
-                                    break;
-                                case "researchDevelopment":
-                                $color = $result < 5;
-                                break;
+                                }
+
+                                if ($this->{$this->secondCurrent} > 0 && $this->{$this->firstCurrent} > 0) {
+                                    $result = ($this->{$this->secondCurrent} / $this->{$this->firstCurrent}) * 100;
+                                }
+                            } else if ($this->{$this->secondCurrent . $c} > 0 && $this->{$this->firstCurrent . $c} > 0) {
+                                $result = ($this->{$this->secondCurrent . $c} / $this->{$this->firstCurrent . $c}) * 100;
                             }
 
-                            if ($color === true) {
-                                $this->sheet->setCellValue(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow, $result)
-                                    ->getStyle(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow)
-                                    ->getFill()
-                                    ->setFillType(Fill::FILL_SOLID)
-                                    ->getStartColor()
-                                    ->setARGB('39a6a3');
-                            } else {
-                                $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (3 + $c)] . $this->countRow, $result);
+                            if (isset($result)) {
+                                switch ($this->secondCurrent) {
+                                    case "brutBusiness":
+                                        $color = $result > 35;
+                                        break;
+                                    case "generalSellAdministrative":
+                                        $color = $result < 30;
+                                        break;
+                                    case "interestCharge":
+                                        $color = $result < 15;
+                                        break;
+                                    case "netBenefice":
+                                        $color = $result > 15;
+                                        break;
+                                    case "researchDevelopment":
+                                        $color = $result < 5;
+                                        break;
+                                    case "investFinance":
+                                        $color = ($result > -25) ? true : ($result < -25 && $result > -50) ? "orange" : "red";
+                                        break;
+                                    case "properCapitalTotal":
+                                        $color = $result < 0.8;
+                                         break;
+                                }
+
+                                if ($color === true) {
+                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow, $result)
+                                        ->getStyle(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow)
+                                        ->getFill()
+                                        ->setFillType(Fill::FILL_SOLID)
+                                        ->getStartColor()
+                                        ->setARGB('39a6a3');
+                                } else if ($color === "orange"){
+                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow, $result)
+                                        ->getStyle(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow)
+                                        ->getFill()
+                                        ->setFillType(Fill::FILL_SOLID)
+                                        ->getStartColor()
+                                        ->setARGB('FF7F00');
+
+                                } else if ($color === "red") {
+                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow, $result)
+                                        ->getStyle(self::$alaphabetNumeric[$count + (3 + $c)] . $this->countRow)
+                                        ->getFill()
+                                        ->setFillType(Fill::FILL_SOLID)
+                                        ->getStartColor()
+                                        ->setARGB('FF0000');
+                                }
+                                else {
+                                    $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet + (3 + $c)] . $this->countRow, $result);
+                                }
                             }
                         }
                     }
@@ -285,6 +409,47 @@ class InsertInSpreadsheet {
                     $this->secondCountDown = 0;
                     $this->firstCurrent = "brutBusiness";
                     $this->secondCurrent = "researchDevelopment";
+                }
+
+                /**
+                 * SIXTH FORMULA ACTIONARY ORDINARY NET BENEFICE
+                 */
+                if ($val === "Bénéficenetdisponiblepourlesactionnairesordinaires") {
+                    $this->secondCountDown = 0;
+                    $this->secondCurrent = "ordinaryActionaryBenefice";
+                }
+
+                /**
+                 * SEVENTH FORMULA CAPEX
+                 */
+                if ($val === "Dépensesd’investissement") {
+                    $this->secondCountDown = 0;
+                    $this->firstCurrent = "netBenefice";
+                    $this->secondCurrent = "investFinance";
+                }
+
+                /**
+                 * HEIGTH FORMULA FINANCIAL RATIO
+                 */
+                if ($val === "Passifstotaux") {
+                    $this->secondCountDown = 0;
+                    $this->firstCurrent = "totalPassif";
+                }
+
+                /**
+                 * NINTH arrangedBenefice
+                 */
+                if ($val === "Bénéficesnonrépartisx") {
+                    $this->secondCountDown = 0;
+                    $this->firstCurrent = "arrangedBenefice";
+                }
+
+                /**
+                 * TENTH arrangedBenefice
+                 */
+                if ($val === "Inventary") {
+                    $this->secondCountDown = 0;
+                    $this->firstCurrent = "inventary";
                 }
 
                 if(is_numeric($val)) {

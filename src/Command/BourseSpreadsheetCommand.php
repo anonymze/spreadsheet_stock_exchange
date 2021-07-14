@@ -49,7 +49,7 @@ class BourseSpreadsheetCommand extends Command
         $count = 0;
 
 //        foreach ($allBusiness as $category => $allBusinessByCategory){
-             foreach (AllBusiness::$allBusiness as $business) {
+             foreach (AllBusiness::$sweden as $business) {
                  $index = 0;
                 foreach ($this->whichData as $extendUrl) {
                     // get content page
