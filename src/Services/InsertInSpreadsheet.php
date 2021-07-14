@@ -119,13 +119,13 @@ class InsertInSpreadsheet {
     protected $properCapitalTotal5 = "";
     protected $properCapitalTotal6 = "";
     protected $properCapitalTotal7 = "";
-    protected $inventary = "";
-    protected $inventary2 = "";
-    protected $inventary3 = "";
-    protected $inventary4 = "";
-    protected $inventary5 = "";
-    protected $inventary6 = "";
-    protected $inventary7 = "";
+    protected $inventory = "";
+    protected $inventory2 = "";
+    protected $inventory3 = "";
+    protected $inventory4 = "";
+    protected $inventory5 = "";
+    protected $inventory6 = "";
+    protected $inventory7 = "";
     protected $arrangedBenefice = "";
     protected $arrangedBenefice2 = "";
     protected $arrangedBenefice3 = "";
@@ -214,14 +214,14 @@ class InsertInSpreadsheet {
                         $color = false;
 
                         // check previous result and calculate %
-                        if ($this->secondCurrent === "ordinaryActionaryBenefice") {
+                        if ($this->secondCurrent === "ordinaryActionaryBenefice" || $this->secondCurrent === "inventory" || $this->secondCurrent === "arrangedBenefice") {
 
                             switch ($this->secondCurrent) {
                                 case "ordinaryActionaryBenefice":
                                     $percent = 10;
                                     break;
                                 case "arrangedBenefice":
-                                case "inventary":
+                                case "inventory":
                                     $percent = 1;
                                     break;
                             }
@@ -433,23 +433,23 @@ class InsertInSpreadsheet {
                  */
                 if ($val === "Passifstotaux") {
                     $this->secondCountDown = 0;
-                    $this->firstCurrent = "totalPassif";
+                    $this->secondCurrent = "totalPassif";
                 }
 
                 /**
                  * NINTH arrangedBenefice
                  */
-                if ($val === "Bénéficesnonrépartisx") {
+                if ($val === "Bénéficesnonrépartis") {
                     $this->secondCountDown = 0;
-                    $this->firstCurrent = "arrangedBenefice";
+                    $this->secondCurrent = "arrangedBenefice";
                 }
 
                 /**
                  * TENTH arrangedBenefice
                  */
-                if ($val === "Inventary") {
+                if ($val === "Inventory") {
                     $this->secondCountDown = 0;
-                    $this->firstCurrent = "inventary";
+                    $this->secondCurrent = "inventory";
                 }
 
                 if(is_numeric($val)) {
