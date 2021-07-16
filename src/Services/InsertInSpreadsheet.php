@@ -133,6 +133,27 @@ class InsertInSpreadsheet {
     protected $arrangedBenefice5 = "";
     protected $arrangedBenefice6 = "";
     protected $arrangedBenefice7 = "";
+    protected $longDept = "";
+    protected $longDept2 = "";
+    protected $longDept3 = "";
+    protected $longDept4 = "";
+    protected $longDept5 = "";
+    protected $longDept6 = "";
+    protected $longDept7 = "";
+    protected $shortActifTotal = "";
+    protected $shortActifTotal2 = "";
+    protected $shortActifTotal3 = "";
+    protected $shortActifTotal4 = "";
+    protected $shortActifTotal5 = "";
+    protected $shortActifTotal6 = "";
+    protected $shortActifTotal7 = "";
+    protected $shortPassifTotal = "";
+    protected $shortPassifTotal2 = "";
+    protected $shortPassifTotal3 = "";
+    protected $shortPassifTotal4 = "";
+    protected $shortPassifTotal5 = "";
+    protected $shortPassifTotal6 = "";
+    protected $shortPassifTotal7 = "";
 
     protected $firstCurrent = "";
     protected $secondCurrent = "";
@@ -163,7 +184,12 @@ class InsertInSpreadsheet {
             $this->countRow += 2;
         }
 
-        $this->sheet->setCellValue("A$this->countRow", $title);
+        $this->sheet->setCellValue("A$this->countRow", $title)
+            ->getStyle("A$this->countRow")
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB('D3D3D3');
         $this->countRow++;
 
         for ($i = 0, $iMax = count($thTable); $i < $iMax; $i++) {
@@ -216,6 +242,7 @@ class InsertInSpreadsheet {
                         // check previous result and calculate %
                         if ($this->secondCurrent === "ordinaryActionaryBenefice" || $this->secondCurrent === "inventory" || $this->secondCurrent === "arrangedBenefice") {
 
+                            // check augmentation every year
                             switch ($this->secondCurrent) {
                                 case "ordinaryActionaryBenefice":
                                     $percent = 10;
@@ -228,7 +255,16 @@ class InsertInSpreadsheet {
 
                                 if ($c === 1) {
                                     if ($this->{$this->secondCurrent} > 0 && $this->{$this->secondCurrent . ($c + 1)} > 0) {
-                                        if ($this->{$this->secondCurrent} > $this->{$this->secondCurrent . "2"} + ($this->{$this->secondCurrent . "2"} * $percent / 100)) {
+                                        if ($this->secondCurrent === "longDept") {
+                                            $calcul = $this->{$this->secondCurrent} < (4 * $this->{$this->firstCurrent});
+                                        } else if ($this->secondCurrent === "shortPassifTotal") {
+                                            $calcul = (1.5 * $this->{$this->firstCurrent}) > $this->{$this->secondCurrent};
+                                        }
+                                        else {
+                                            $calcul = $this->{$this->secondCurrent} > ($this->{$this->secondCurrent . "2"} + ($this->{$this->secondCurrent . "2"} * $percent / 100));
+                                        }
+
+                                        if ($calcul) {
                                             $this->sheet->setCellValue(self::$alaphabetNumeric[$c + 1] . $this->countRow, $this->{$this->secondCurrent})
                                                 ->getStyle(self::$alaphabetNumeric[$c + 1] . $this->countRow)
                                                 ->getFill()
@@ -246,7 +282,16 @@ class InsertInSpreadsheet {
                                     }
                                 } else {
                                     if ($this->{$this->secondCurrent . $c} > 0 && $this->{$this->secondCurrent . ($c + 1)} > 0) {
-                                        if ($this->{$this->secondCurrent . $c} > $this->{$this->secondCurrent . ($c + 1)} + ($this->{$this->secondCurrent . ($c + 1)} * $percent / 100)) {
+                                        if ($this->secondCurrent === "longDept") {
+                                            $calcul = $this->{$this->secondCurrent . $c} < (4 * $this->{$this->firstCurrent . $c});
+                                        } else if ($this->secondCurrent === "shortPassifTotal") {
+                                            $calcul = (1.5 * $this->{$this->firstCurrent . $c}) > $this->{$this->secondCurrent . $c};
+                                        }
+                                        else {
+                                            $calcul = $this->{$this->secondCurrent . $c} > ($this->{$this->secondCurrent . ($c + 1)} + ($this->{$this->secondCurrent . ($c + 1)} * $percent / 100));
+                                       }
+
+                                        if ($calcul) {
                                             $this->sheet->setCellValue(self::$alaphabetNumeric[$c + 1] . $this->countRow, $this->{$this->secondCurrent . $c})
                                                 ->getStyle(self::$alaphabetNumeric[$c + 1] . $this->countRow)
                                                 ->getFill()
@@ -293,10 +338,18 @@ class InsertInSpreadsheet {
                                 }
 
                                 if ($this->{$this->secondCurrent} > 0 && $this->{$this->firstCurrent} > 0) {
-                                    $result = ($this->{$this->secondCurrent} / $this->{$this->firstCurrent}) * 100;
+                                    if ($this->secondCurrent === "properCapitalTotal") {
+                                       $result = ($this->{$this->secondCurrent} / $this->{$this->firstCurrent});
+                                    } else {
+                                        $result = ($this->{$this->secondCurrent} / $this->{$this->firstCurrent}) * 100;
+                                    }
                                 }
                             } else if ($this->{$this->secondCurrent . $c} > 0 && $this->{$this->firstCurrent . $c} > 0) {
-                                $result = ($this->{$this->secondCurrent . $c} / $this->{$this->firstCurrent . $c}) * 100;
+                                if ($this->secondCurrent === "properCapitalTotal") {
+                                    $result = ($this->{$this->secondCurrent . $c} / $this->{$this->firstCurrent . $c});
+                                } else {
+                                    $result = ($this->{$this->secondCurrent . $c} / $this->{$this->firstCurrent . $c}) * 100;
+                                }
                             }
 
                             if (isset($result)) {
@@ -428,13 +481,7 @@ class InsertInSpreadsheet {
                     $this->secondCurrent = "investFinance";
                 }
 
-                /**
-                 * HEIGTH FORMULA FINANCIAL RATIO
-                 */
-                if ($val === "Passifstotaux") {
-                    $this->secondCountDown = 0;
-                    $this->secondCurrent = "totalPassif";
-                }
+
 
                 /**
                  * NINTH arrangedBenefice
@@ -447,14 +494,71 @@ class InsertInSpreadsheet {
                 /**
                  * TENTH arrangedBenefice
                  */
-                if ($val === "Inventory") {
+                if ($val === "Inventaire") {
                     $this->secondCountDown = 0;
                     $this->secondCurrent = "inventory";
+                }
+
+                /**
+                 * ELEVENTH passif totaux / totaldescapitauxpropres (pas de *100)
+                 */
+                if ($val === "Passifstotaux") {
+                    $this->firstCountDown = 0;
+                    $this->firstCurrent = "totalPassif";
+                }
+
+                if ($val === "Totaldescapitauxpropres") {
+                    $this->secondCountDown = 0;
+                    $this->secondCurrent = "properCapitalTotal";
+                }
+
+                /**
+                 * twelvth ROTC
+                 */
+//                if ($val === "Passifstotaux") {
+//                    $this->firstCountDown = 0;
+//                    $this->firstCurrent = "totalPassif";
+//                }
+//
+//                if ($val === "Totaldescapitauxpropres") {
+//                    $this->secondCountDown = 0;
+//                    $this->secondCurrent = "properCapitalTotal";
+//                }
+
+                /**
+                 * thirdth dette à long terme
+                 */
+                if ($val === "Detteàlongterme") {
+                    $this->secondCountDown = 0;
+                    $this->firstCurrent = "netBenefice";
+                    $this->secondCurrent = "longDept";
+                }
+
+                /**
+                 * fourteenth dette Total des actifs à court terme x 1,5 > Total des Passif à court terme
+                 */
+                if ($val === "Totaldesactifsàcourtterme") {
+                    $this->firstCountDown = 0;
+                    $this->firstCurrent = "shortActifTotal";
+                }
+
+                if ($val === "Totaldespassifsàcourtterme") {
+                    $this->secondCountDown = 0;
+                    $this->secondCurrent = "shortPassifTotal";
                 }
 
                 if(is_numeric($val)) {
                     $val = (int)$val;
                     $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet] . $this->countRow, "=VALUE($val)");
+
+                // color specific squares
+                } else if ($val === "Passif" || $val === "Actifs") {
+                    $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet] . $this->countRow, $val)
+                                    ->getStyle(self::$alaphabetNumeric[$countAlphabet] . $this->countRow)
+                                    ->getFill()
+                                    ->setFillType(Fill::FILL_SOLID)
+                                    ->getStartColor()
+                                    ->setARGB('87CEEB');
                 } else {
                     $this->sheet->setCellValue(self::$alaphabetNumeric[$countAlphabet] . $this->countRow, $val);
                 }
