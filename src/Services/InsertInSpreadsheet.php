@@ -207,7 +207,11 @@ class InsertInSpreadsheet {
                     $countAlphabet = 1;
                 }
 
-                $val =  preg_replace('/-?\s?/u', '', $tdTableReconstruct[$i]);
+                $val =  preg_replace('/\s?/u', '', $tdTableReconstruct[$i]);
+
+                if ($val === '-') {
+                    $val = '';
+                }
 
                 /**
                  * global formula
@@ -240,7 +244,7 @@ class InsertInSpreadsheet {
                         $color = false;
 
                         // check previous result and calculate %
-                        if ($this->secondCurrent === "ordinaryActionaryBenefice" || $this->secondCurrent === "inventory" || $this->secondCurrent === "arrangedBenefice") {
+                        if ($this->secondCurrent === "ordinaryActionaryBenefice" || $this->secondCurrent === "inventory" || $this->secondCurrent === "arrangedBenefice" || $this->secondCurrent === "longDept" || $this->secondCurrent === "shortPassifTotal") {
 
                             // check augmentation every year
                             switch ($this->secondCurrent) {
@@ -254,11 +258,15 @@ class InsertInSpreadsheet {
                             }
 
                                 if ($c === 1) {
-                                    if ($this->{$this->secondCurrent} > 0 && $this->{$this->secondCurrent . ($c + 1)} > 0) {
+                                    if (is_numeric($this->{$this->secondCurrent}) && is_numeric($this->{$this->secondCurrent . ($c + 1)})) {
                                         if ($this->secondCurrent === "longDept") {
-                                            $calcul = $this->{$this->secondCurrent} < (4 * $this->{$this->firstCurrent});
+                                            if (is_numeric($this->{$this->firstCurrent})) {
+                                                $calcul = $this->{$this->secondCurrent} < (4 * $this->{$this->firstCurrent});
+                                            }
                                         } else if ($this->secondCurrent === "shortPassifTotal") {
-                                            $calcul = (1.5 * $this->{$this->firstCurrent}) > $this->{$this->secondCurrent};
+                                            if (is_numeric($this->{$this->firstCurrent})) {
+                                                $calcul = (1.5 * $this->{$this->firstCurrent}) > $this->{$this->secondCurrent};
+                                            }
                                         }
                                         else {
                                             $calcul = $this->{$this->secondCurrent} > ($this->{$this->secondCurrent . "2"} + ($this->{$this->secondCurrent . "2"} * $percent / 100));
@@ -281,11 +289,15 @@ class InsertInSpreadsheet {
                                         }
                                     }
                                 } else {
-                                    if ($this->{$this->secondCurrent . $c} > 0 && $this->{$this->secondCurrent . ($c + 1)} > 0) {
+                                    if (is_numeric($this->{$this->secondCurrent . $c}) && is_numeric($this->{$this->secondCurrent . ($c + 1)})) {
                                         if ($this->secondCurrent === "longDept") {
-                                            $calcul = $this->{$this->secondCurrent . $c} < (4 * $this->{$this->firstCurrent . $c});
+                                            if (is_numeric($this->{$this->firstCurrent . ($c)})) {
+                                                $calcul = $this->{$this->secondCurrent . $c} < (4 * $this->{$this->firstCurrent . $c});
+                                            }
                                         } else if ($this->secondCurrent === "shortPassifTotal") {
-                                            $calcul = (1.5 * $this->{$this->firstCurrent . $c}) > $this->{$this->secondCurrent . $c};
+                                            if (is_numeric($this->{$this->firstCurrent . ($c)})) {
+                                                $calcul = (1.5 * $this->{$this->firstCurrent . $c}) > $this->{$this->secondCurrent . $c};
+                                            }
                                         }
                                         else {
                                             $calcul = $this->{$this->secondCurrent . $c} > ($this->{$this->secondCurrent . ($c + 1)} + ($this->{$this->secondCurrent . ($c + 1)} * $percent / 100));
@@ -337,14 +349,19 @@ class InsertInSpreadsheet {
                                     break;
                                 }
 
-                                if ($this->{$this->secondCurrent} > 0 && $this->{$this->firstCurrent} > 0) {
+//                                if ($this->secondCurrent === "investFinance") {
+//                                    var_dump($this->{$this->secondCurrent});
+//                                    var_dump($this->{$this->firstCurrent});
+//                                }
+
+                                if (is_numeric($this->{$this->secondCurrent}) && is_numeric($this->{$this->firstCurrent})) {
                                     if ($this->secondCurrent === "properCapitalTotal") {
                                        $result = ($this->{$this->secondCurrent} / $this->{$this->firstCurrent});
                                     } else {
                                         $result = ($this->{$this->secondCurrent} / $this->{$this->firstCurrent}) * 100;
                                     }
                                 }
-                            } else if ($this->{$this->secondCurrent . $c} > 0 && $this->{$this->firstCurrent . $c} > 0) {
+                            } else if (is_numeric($this->{$this->secondCurrent . $c}) && is_numeric($this->{$this->firstCurrent . $c})) {
                                 if ($this->secondCurrent === "properCapitalTotal") {
                                     $result = ($this->{$this->secondCurrent . $c} / $this->{$this->firstCurrent . $c});
                                 } else {
@@ -480,8 +497,6 @@ class InsertInSpreadsheet {
                     $this->firstCurrent = "netBenefice";
                     $this->secondCurrent = "investFinance";
                 }
-
-
 
                 /**
                  * NINTH arrangedBenefice
